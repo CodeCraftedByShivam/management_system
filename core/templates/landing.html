@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System - Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2a1f47 100%);
+        }
+        
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(120, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 107, 107, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(78, 205, 196, 0.15) 0%, transparent 50%);
+            animation: bgRotate 20s linear infinite;
+        }
+        
+        @keyframes bgRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            background: rgba(120, 119, 198, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) translateX(0);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 100;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7877c6 0%, #4ecdc4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo span {
+            font-size: 36px;
+        }
+        
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #7877c6, #4ecdc4);
+            transition: width 0.3s ease;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a:hover {
+            color: #7877c6;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 50px;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 900px;
+            animation: heroFadeIn 1s ease-out;
+        }
+        
+        @keyframes heroFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero h1 {
+            font-size: 72px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #7877c6 50%, #4ecdc4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 10px rgba(120, 119, 198, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 30px rgba(120, 119, 198, 0.6));
+            }
+        }
+        
+        .hero p {
+            font-size: 22px;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #7877c6 0%, #5e548e 100%);
+            color: white;
+            box-shadow: 0 10px 40px rgba(120, 119, 198, 0.4);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(120, 119, 198, 0.6);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid #7877c6;
+        }
+        
+        .btn-secondary:hover {
+            background: #7877c6;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(120, 119, 198, 0.4);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 100px 50px;
+            position: relative;
+        }
+        
+        .features h2 {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 60px;
+            font-weight: 700;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: rgba(26, 26, 46, 0.6);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid rgba(120, 119, 198, 0.2);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            animation: featureSlideUp 0.6s ease-out backwards;
+        }
+        
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        
+        @keyframes featureSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: #7877c6;
+            box-shadow: 0 20px 50px rgba(120, 119, 198, 0.3);
+            background: rgba(120, 119, 198, 0.1);
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.6;
+        }
+        
+        /* Stats Section */
+        .stats {
+            padding: 80px 50px;
+            background: rgba(120, 119, 198, 0.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #7877c6 0%, #4ecdc4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 18px;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 50px;
+            text-align: center;
+        }
+        
+        .cta-section h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+        
+        .cta-section p {
+            font-size: 20px;
+            color: #b0b0b0;
+            margin-bottom: 40px;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 30px 50px;
+            text-align: center;
+            border-top: 1px solid rgba(120, 119, 198, 0.2);
+            color: #b0b0b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <!-- Floating Particles -->
+        <div class="particle" style="width: 3px; height: 3px; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="width: 5px; height: 5px; left: 20%; animation-delay: 2s;"></div>
+        <div class="particle" style="width: 4px; height: 4px; left: 35%; animation-delay: 4s;"></div>
+        <div class="particle" style="width: 6px; height: 6px; left: 50%; animation-delay: 1s;"></div>
+        <div class="particle" style="width: 3px; height: 3px; left: 65%; animation-delay: 3s;"></div>
+        <div class="particle" style="width: 5px; height: 5px; left: 80%; animation-delay: 5s;"></div>
+        <div class="particle" style="width: 4px; height: 4px; left: 90%; animation-delay: 2.5s;"></div>
+    </div>
+    
+    <header>
+        <div class="logo">
+            <span>🎓</span> EduManage
+        </div>
+        <nav>
+            <a href="{% url 'landing' %}">Home</a>
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="/admin/">Admin</a>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Modern Student Management System</h1>
+            <p>Streamline your educational institution with our comprehensive, intuitive, and powerful student management platform. Track students, courses, grades, attendance, and more.</p>
+            <div class="cta-buttons">
+                <a href="{% url 'dashboard' %}" class="btn btn-primary">Get Started</a>
+                <a href="#features" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <h2>Powerful Features</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">👥</span>
+                <h3>Student Management</h3>
+                <p>Complete student profiles with personal information, contact details, academic records, and more.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📚</span>
+                <h3>Course Management</h3>
+                <p>Create and manage courses with detailed information, enrollment tracking, and capacity management.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📊</span>
+                <h3>Grade Tracking</h3>
+                <p>Track assignments, exams, and overall performance with detailed grade reports and analytics.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📅</span>
+                <h3>Attendance System</h3>
+                <p>Monitor attendance records with detailed reports and automatic percentage calculations.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📢</span>
+                <h3>Announcements</h3>
+                <p>Broadcast important updates and notifications to students and staff instantly.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📈</span>
+                <h3>Analytics & Reports</h3>
+                <p>Generate comprehensive reports with visual charts and detailed insights.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="stats">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">500+</span>
+                <span class="stat-label">Students</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">50+</span>
+                <span class="stat-label">Courses</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">25+</span>
+                <span class="stat-label">Instructors</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">98%</span>
+                <span class="stat-label">Satisfaction</span>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section">
+        <h2>Ready to Get Started?</h2>
+        <p>Join thousands of institutions managing their students efficiently</p>
+        <a href="{% url 'dashboard' %}" class="btn btn-primary">Access Dashboard</a>
+    </section>
+    
+    <footer>
+        <p>&copy; 2025 EduManage - Student Management System. All rights reserved.</p>
+    </footer>
+</body>
+</html>

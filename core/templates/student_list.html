@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}Students List{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>👥 Students Management</h1>
+        <p style="color: #b0b0b0; margin-top: 10px;">Manage and track all student records</p>
+    </div>
+    <a href="{% url 'student_create' %}" class="btn btn-success">
+        <span style="font-size: 18px;">➕</span> Add New Student
+    </a>
+</div>
+
+<!-- Search and Filter Section -->
+<div class="filter-section">
+    <form method="get" class="filter-form">
+        <div class="search-box">
+            <span class="search-icon">🔍</span>
+            <input 
+                type="text" 
+                name="q" 
+                placeholder="Search by name, ID, or email..." 
+                value="{{ query }}"
+                class="search-input"
+            >
+        </div>
+        
+        <select name="status" class="filter-select">
+            <option value="">All Status</option>
+            <option value="Active" {% if status_filter == 'Active' %}selected{% endif %}>Active</option>
+            <option value="Inactive" {% if status_filter == 'Inactive' %}selected{% endif %}>Inactive</option>
+            <option value="Graduated" {% if status_filter == 'Graduated' %}selected{% endif %}>Graduated</option>
+            <option value="Suspended" {% if status_filter == 'Suspended' %}selected{% endif %}>Suspended</option>
+        </select>
+        
+        <button type="submit" class="btn btn-primary">Filter</button>
+        <a href="{% url 'student_list' %}" class="btn">Clear</a>
+    </form>
+</div>
+
+<!-- Students Table -->
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Profile</th>
+                <th>Student ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>City</th>
+                <th>Status</th>
+                <th>Enrolled</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>
+                    <div class="student-avatar">
+                        {% if student.profile_image %}
+                            <img src="{{ student.profile_image.url }}" alt="{{ student.full_name }}">
+                        {% else %}
+                            <div class="avatar-placeholder-small">{{ student.first_name.0 }}{{ student.last_name.0 }}</div>
+                        {% endif %}
+                    </div>
+                </td>
+                <td><span class="student-id">{{ student.student_id }}</span></td>
+                <td><strong>{{ student.full_name }}</strong></td>
+                <td>{{ student.email }}</td>
+                <td>{{ student.phone }}</td>
+                <td>{{ student.city }}</td>
+                <td>
+                    <span class="status-badge status-{{ student.status|lower }}">
+                        {{ student.status }}
+                    </span>
+                </td>
+                <td>{{ student.enrollment_date|date:"M d, Y" }}</td>
+                <td>
+                    <div class="action-buttons-table">
+                        <a href="{% url 'student_detail' student.pk %}" class="action-icon" title="View">👁️</a>
+                        <a href="{% url 'student_update' student.pk %}" class="action-icon" title="Edit">✏️</a>
+                        <a href="{% url 'student_delete' student.pk %}" class="action-icon delete" title="Delete">🗑️</a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="9" class="empty-row">
+                    <div class="empty-state-large">
+                        <span style="font-size: 64px;">📭</span>
+                        <h3>No students found</h3>
+                        <p>Try adjusting your filters or add a new student</p>
+                        <a href="{% url 'student_create' %}" class="btn btn-primary" style="margin-top: 20px;">Add First Student</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+
+.filter-section {
+    background: rgba(44, 62, 80, 0.3);
+    padding: 25px;
+    border-radius: 15px;
+    border: 2px solid rgba(120, 119, 198, 0.3);
+    margin-bottom: 30px;
+}
+
+.filter-form {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-box {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 18px 14px 50px;
+    background: rgba(26, 26, 46, 0.5);
+    border: 2px solid rgba(120, 119, 198, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #7877c6;
+    box-shadow: 0 0 0 4px rgba(120, 119, 198, 0.1);
+}
+
+.filter-select {
+    padding: 14px 18px;
+    background: rgba(26, 26, 46, 0.5);
+    border: 2px solid rgba(120, 119, 198, 0.3);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #7877c6;
+}
+
+.table-container {
+    background: rgba(44, 62, 80, 0.3);
+    border-radius: 15px;
+    border: 2px solid rgba(120, 119, 198, 0.3);
+    overflow: hidden;
+}
+
+table {
+    border-spacing: 0;
+    margin: 0;
+}
+
+thead tr {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+}
+
+tbody tr {
+    background: transparent;
+    border-bottom: 1px solid rgba(120, 119, 198, 0.1);
+}
+
+tbody tr:last-child {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: rgba(120, 119, 198, 0.1);
+}
+
+.student-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.student-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder-small {
+    width: 45px;
+    height: 45px;
+    background: linear-gradient(135deg, #7877c6, #4ecdc4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.student-id {
+    padding: 4px 10px;
+    background: rgba(120, 119, 198, 0.2);
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #7877c6;
+}
+
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-active {
+    background: rgba(78, 205, 196, 0.2);
+    color: #4ecdc4;
+    border: 1px solid #4ecdc4;
+}
+
+.status-inactive {
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+.status-graduated {
+    background: rgba(254, 202, 87, 0.2);
+    color: #feca57;
+    border: 1px solid #feca57;
+}
+
+.status-suspended {
+    background: rgba(150, 150, 150, 0.2);
+    color: #999;
+    border: 1px solid #999;
+}
+
+.action-buttons-table {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.action-icon {
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.action-icon:hover {
+    transform: scale(1.2);
+}
+
+.action-icon.delete:hover {
+    filter: drop-shadow(0 0 10px rgba(255, 107, 107, 0.8));
+}
+
+.empty-row {
+    padding: 0 !important;
+}
+
+.empty-state-large {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.empty-state-large h3 {
+    font-size: 24px;
+    margin: 20px 0 10px;
+    color: #fff;
+}
+
+.empty-state-large p {
+    color: #b0b0b0;
+}
+
+@media (max-width: 768px) {
+    .table-container {
+        overflow-x: auto;
+    }
+    
+    table {
+        min-width: 800px;
+    }
+}
+</style>
+{% endblock %}

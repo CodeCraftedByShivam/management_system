@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Student{% endblock %}
+
+{% block content %}
+<h1>Delete Student</h1>
+
+<div class="alert alert-danger" style="background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+    <p>Are you sure you want to delete <strong>{{ student.first_name }} {{ student.last_name }}</strong>?</p>
+    <p>This action cannot be undone.</p>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a href="{% url 'student_list' %}" class="btn">Cancel</a>
+</form>
+{% endblock %}

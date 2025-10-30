@@ -1,0 +1,908 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - EduManage{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <div class="header-content">
+        <h1>📊 Dashboard Overview</h1>
+        <p>Welcome back! Here's what's happening today.</p>
+    </div>
+    <div class="header-date">
+        <span class="date-icon">📅</span>
+        <span id="current-date"></span>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="stats-grid">
+    <div class="stat-card stat-card-1">
+        <div class="stat-icon">👥</div>
+        <div class="stat-info">
+            <h3>{{ total_students }}</h3>
+            <p>Total Students</p>
+            <span class="stat-badge">{{ active_students }} Active</span>
+        </div>
+        <div class="stat-progress">
+            <div class="mini-progress" style="width: 75%;"></div>
+        </div>
+    </div>
+
+    <div class="stat-card stat-card-2">
+        <div class="stat-icon">📚</div>
+        <div class="stat-info">
+            <h3>{{ total_courses }}</h3>
+            <p>Total Courses</p>
+            <span class="stat-badge">{{ active_courses }} Active</span>
+        </div>
+        <div class="stat-progress">
+            <div class="mini-progress" style="width: 85%;"></div>
+        </div>
+    </div>
+
+    <div class="stat-card stat-card-3">
+        <div class="stat-icon">📝</div>
+        <div class="stat-info">
+            <h3>{{ total_enrollments }}</h3>
+            <p>Total Enrollments</p>
+            <span class="stat-badge">{{ active_enrollments }} Active</span>
+        </div>
+        <div class="stat-progress">
+            <div class="mini-progress" style="width: 90%;"></div>
+        </div>
+    </div>
+
+    <div class="stat-card stat-card-4">
+        <div class="stat-icon">⭐</div>
+        <div class="stat-info">
+            <h3>4.8</h3>
+            <p>Average Rating</p>
+            <span class="stat-badge">98% Satisfaction</span>
+        </div>
+        <div class="stat-progress">
+            <div class="mini-progress" style="width: 95%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="quick-actions">
+    <h2>⚡ Quick Actions</h2>
+    <div class="action-buttons">
+        <a href="{% url 'student_create' %}" class="action-btn action-btn-1">
+            <div class="action-icon-wrapper">
+                <span class="action-icon">➕</span>
+            </div>
+            <div class="action-content">
+                <span class="action-text">Add Student</span>
+                <span class="action-desc">Register new student</span>
+            </div>
+        </a>
+        <a href="{% url 'course_create' %}" class="action-btn action-btn-2">
+            <div class="action-icon-wrapper">
+                <span class="action-icon">📖</span>
+            </div>
+            <div class="action-content">
+                <span class="action-text">Add Course</span>
+                <span class="action-desc">Create new course</span>
+            </div>
+        </a>
+        <a href="{% url 'student_list' %}" class="action-btn action-btn-3">
+            <div class="action-icon-wrapper">
+                <span class="action-icon">👁️</span>
+            </div>
+            <div class="action-content">
+                <span class="action-text">View Students</span>
+                <span class="action-desc">Browse all students</span>
+            </div>
+        </a>
+        <a href="{% url 'course_list' %}" class="action-btn action-btn-4">
+            <div class="action-icon-wrapper">
+                <span class="action-icon">📋</span>
+            </div>
+            <div class="action-content">
+                <span class="action-text">View Courses</span>
+                <span class="action-desc">Browse all courses</span>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="dashboard-grid">
+    <!-- Recent Students -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h2>👥 Recent Students</h2>
+            <a href="{% url 'student_list' %}" class="view-all">View All →</a>
+        </div>
+        <div class="card-content">
+            {% if recent_students %}
+            <div class="list-items">
+                {% for student in recent_students %}
+                <div class="list-item">
+                    <div class="item-avatar">
+                        {% if student.profile_image %}
+                        <img src="{{ student.profile_image.url }}" alt="{{ student.full_name }}">
+                        {% else %}
+                        <div class="avatar-placeholder">{{ student.first_name.0 }}{{ student.last_name.0 }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="item-info">
+                        <h4>{{ student.full_name }}</h4>
+                        <p>{{ student.student_id }} • {{ student.city }}</p>
+                    </div>
+                    <div class="item-status status-{{ student.status|lower }}">
+                        {{ student.status }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">📭</span>
+                <p>No students added yet</p>
+                <a href="{% url 'student_create' %}" class="btn btn-sm">Add First Student</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Recent Enrollments -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h2>📝 Recent Enrollments</h2>
+            <a href="{% url 'student_list' %}" class="view-all">View All →</a>
+        </div>
+        <div class="card-content">
+            {% if recent_enrollments %}
+            <div class="list-items">
+                {% for enrollment in recent_enrollments %}
+                <div class="list-item">
+                    <div class="enrollment-icon">
+                        <span>📚</span>
+                    </div>
+                    <div class="item-info">
+                        <h4>{{ enrollment.student.full_name }}</h4>
+                        <p>{{ enrollment.course.course_name }}</p>
+                    </div>
+                    <div class="item-badge">
+                        {{ enrollment.enrollment_date|date:"M d" }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">📝</span>
+                <p>No recent enrollments</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Top Courses -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h2>🔥 Popular Courses</h2>
+            <a href="{% url 'course_list' %}" class="view-all">View All →</a>
+        </div>
+        <div class="card-content">
+            {% if course_stats %}
+            <div class="course-stats">
+                {% for course in course_stats %}
+                <div class="course-stat-item">
+                    <div class="course-stat-header">
+                        <div class="course-stat-info">
+                            <h4>{{ course.course_name }}</h4>
+                            <p>{{ course.course_code }} • {{ course.instructor }}</p>
+                        </div>
+                        <div class="course-count">
+                            <span class="count-number">{{ course.enrolled|default:0 }}</span>
+                        </div>
+                    </div>
+                    <div class="course-stat-bar">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 70%;"></div>
+                        </div>
+                        <span class="progress-text">{{ course.enrolled|default:0 }} enrolled</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+
+            <div class="empty-state">
+                <span class="empty-icon">📚</span>
+                <p>No courses available</p>
+                <a href="{% url 'course_create' %}" class="btn btn-sm">Add First Course</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Announcements -->
+    <div class="dashboard-card">
+        <div class="card-header">
+            <h2>📢 Announcements</h2>
+            <span class="badge-new">NEW</span>
+        </div>
+        <div class="card-content">
+            {% if announcements %}
+            <div class="announcements-list">
+                {% for announcement in announcements %}
+                <div class="announcement-item priority-{{ announcement.priority|lower }}">
+                    <div class="announcement-icon">
+                        {% if announcement.priority == 'High' %}🔴
+                        {% elif announcement.priority == 'Medium' %}🟡
+                        {% else %}🟢{% endif %}
+                    </div>
+                    <div class="announcement-content">
+                        <h4>{{ announcement.title }}</h4>
+                        <p>{{ announcement.content|truncatewords:15 }}</p>
+                        <span class="announcement-time">{{ announcement.created_at|timesince }} ago</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <span class="empty-icon">📢</span>
+                <p>No announcements</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Display current date
+    function updateDate() {
+        const dateElement = document.getElementById('current-date');
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+    }
+    updateDate();
+
+    // Add animation on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.stat-card, .dashboard-card, .action-btn').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'all 0.6s ease';
+        observer.observe(el);
+    });
+</script>
+
+<style>
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-content h1 {
+        font-size: 36px;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #fff 0%, #7877c6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header-content p {
+        color: #b0b0b0;
+        font-size: 16px;
+    }
+
+    .header-date {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 20px;
+        background: rgba(44, 62, 80, 0.3);
+        border: 2px solid rgba(120, 119, 198, 0.3);
+        border-radius: 12px;
+        color: #e0e0e0;
+    }
+
+    .date-icon {
+        font-size: 20px;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .stat-card {
+        background: rgba(44, 62, 80, 0.3);
+        padding: 30px;
+        border-radius: 15px;
+        border: 2px solid rgba(120, 119, 198, 0.3);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        transition: width 0.3s ease;
+    }
+
+    .stat-card-1::before {
+        background: linear-gradient(135deg, #7877c6, #5e548e);
+    }
+
+    .stat-card-2::before {
+        background: linear-gradient(135deg, #4ecdc4, #44a08d);
+    }
+
+    .stat-card-3::before {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    }
+
+    .stat-card-4::before {
+        background: linear-gradient(135deg, #feca57, #ff9ff3);
+    }
+
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(120, 119, 198, 0.4);
+        border-color: #7877c6;
+    }
+
+    .stat-card:hover::before {
+        width: 100%;
+        opacity: 0.1;
+    }
+
+    .stat-icon {
+        font-size: 48px;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    }
+
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .stat-info h3 {
+        font-size: 42px;
+        font-weight: 700;
+        margin-bottom: 5px;
+        background: linear-gradient(135deg, #fff 0%, #7877c6 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .stat-info p {
+        color: #b0b0b0;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .stat-badge {
+        display: inline-block;
+        padding: 6px 14px;
+        background: rgba(120, 119, 198, 0.2);
+        border-radius: 20px;
+        font-size: 12px;
+        color: #7877c6;
+        font-weight: 600;
+        width: fit-content;
+    }
+
+    .stat-progress {
+        width: 100%;
+        height: 4px;
+        background: rgba(44, 62, 80, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .mini-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #7877c6, #4ecdc4);
+        border-radius: 10px;
+        transition: width 1s ease;
+    }
+
+    .quick-actions {
+        margin-bottom: 40px;
+    }
+
+    .quick-actions h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: #fff;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 25px;
+        background: rgba(44, 62, 80, 0.3);
+        border: 2px solid rgba(120, 119, 198, 0.3);
+        border-radius: 15px;
+        text-decoration: none;
+        color: #fff;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(120, 119, 198, 0.2), transparent);
+        transition: left 0.6s ease;
+    }
+
+    .action-btn:hover::before {
+        left: 100%;
+    }
+
+    .action-btn:hover {
+        transform: translateY(-5px);
+        border-color: #7877c6;
+        box-shadow: 0 12px 30px rgba(120, 119, 198, 0.4);
+    }
+
+    .action-icon-wrapper {
+        width: 50px;
+        height: 50px;
+        background: rgba(120, 119, 198, 0.2);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .action-icon {
+        font-size: 28px;
+    }
+
+    .action-content {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .action-text {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .action-desc {
+        font-size: 12px;
+        color: #b0b0b0;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        gap: 30px;
+    }
+
+    .dashboard-card {
+        background: rgba(44, 62, 80, 0.3);
+        border: 2px solid rgba(120, 119, 198, 0.3);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dashboard-card:hover {
+        border-color: #7877c6;
+        box-shadow: 0 12px 35px rgba(120, 119, 198, 0.3);
+        transform: translateY(-3px);
+    }
+
+    .card-header {
+        padding: 25px;
+        border-bottom: 2px solid rgba(120, 119, 198, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-header h2 {
+        font-size: 20px;
+        margin: 0;
+        color: #fff;
+    }
+
+    .view-all {
+        color: #7877c6;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .view-all:hover {
+        color: #4ecdc4;
+        transform: translateX(3px);
+    }
+
+    .badge-new {
+        background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        color: #fff;
+    }
+
+    .card-content {
+        padding: 25px;
+    }
+
+    .list-items {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .list-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: rgba(26, 26, 46, 0.5);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        border: 1px solid transparent;
+    }
+
+    .list-item:hover {
+        background: rgba(120, 119, 198, 0.15);
+        transform: translateX(5px);
+        border-color: rgba(120, 119, 198, 0.3);
+    }
+
+    .item-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        overflow: hidden;
+        flex-shrink: 0;
+        border: 2px solid rgba(120, 119, 198, 0.3);
+    }
+
+    .item-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #7877c6, #4ecdc4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 20px;
+        color: #fff;
+    }
+
+    .enrollment-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(120, 119, 198, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .item-info {
+        flex: 1;
+    }
+
+    .item-info h4 {
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .item-info p {
+        font-size: 13px;
+        color: #b0b0b0;
+        margin: 0;
+    }
+
+    .item-status {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-active {
+        background: rgba(78, 205, 196, 0.2);
+        color: #4ecdc4;
+        border: 1px solid #4ecdc4;
+    }
+
+    .status-inactive {
+        background: rgba(255, 107, 107, 0.2);
+        color: #ff6b6b;
+        border: 1px solid #ff6b6b;
+    }
+
+    .status-graduated {
+        background: rgba(254, 202, 87, 0.2);
+        color: #feca57;
+        border: 1px solid #feca57;
+    }
+
+    .status-suspended {
+        background: rgba(150, 150, 150, 0.2);
+        color: #999;
+        border: 1px solid #999;
+    }
+
+    .item-badge {
+        padding: 6px 14px;
+        background: rgba(120, 119, 198, 0.2);
+        border-radius: 10px;
+        font-size: 12px;
+        color: #7877c6;
+        font-weight: 600;
+    }
+
+    .course-stats {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .course-stat-item {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        background: rgba(26, 26, 46, 0.5);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .course-stat-item:hover {
+        background: rgba(120, 119, 198, 0.1);
+    }
+
+    .course-stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .course-stat-info {
+        flex: 1;
+    }
+
+    .course-stat-info h4 {
+        font-size: 16px;
+        color: #fff;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .course-stat-info p {
+        font-size: 13px;
+        color: #b0b0b0;
+        margin: 0;
+    }
+
+    .course-count {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        background: rgba(120, 119, 198, 0.2);
+        border-radius: 10px;
+    }
+
+    .count-number {
+        font-size: 18px;
+        font-weight: 700;
+        color: #7877c6;
+    }
+
+    .course-stat-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: rgba(44, 62, 80, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #7877c6, #4ecdc4);
+        border-radius: 10px;
+        transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 0 10px rgba(120, 119, 198, 0.5);
+    }
+
+    .progress-text {
+        font-size: 13px;
+        color: #7877c6;
+        font-weight: 600;
+        min-width: 85px;
+    }
+
+    .announcements-list {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .announcement-item {
+        display: flex;
+        gap: 15px;
+        padding: 18px;
+        background: rgba(26, 26, 46, 0.5);
+        border-radius: 12px;
+        border-left: 4px solid;
+        transition: all 0.3s ease;
+    }
+
+    .announcement-item:hover {
+        background: rgba(120, 119, 198, 0.1);
+        transform: translateX(3px);
+    }
+
+    .priority-high {
+        border-left-color: #ff6b6b;
+    }
+
+    .priority-medium {
+        border-left-color: #feca57;
+    }
+
+    .priority-low {
+        border-left-color: #4ecdc4;
+    }
+
+    .announcement-icon {
+        font-size: 24px;
+        flex-shrink: 0;
+    }
+
+    .announcement-content {
+        flex: 1;
+    }
+
+    .announcement-content h4 {
+        font-size: 15px;
+        color: #fff;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .announcement-content p {
+        font-size: 13px;
+        color: #b0b0b0;
+        margin-bottom: 8px;
+        line-height: 1.5;
+    }
+
+    .announcement-time {
+        font-size: 11px;
+        color: #7877c6;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 50px 20px;
+        color: #b0b0b0;
+    }
+
+    .empty-icon {
+        font-size: 56px;
+        display: block;
+        margin-bottom: 15px;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        margin-bottom: 15px;
+    }
+
+    .btn-sm {
+        display: inline-block;
+        padding: 8px 16px;
+        background: linear-gradient(135deg, #7877c6, #5e548e);
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-sm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(120, 119, 198, 0.4);
+    }
+
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

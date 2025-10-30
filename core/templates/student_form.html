@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" style="animation: alertSlideIn 0.5s ease-out;">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    
+    <div class="form-sections">
+        <!-- Personal Information -->
+        <div class="form-section">
+            <h2 style="color: #7877c6; margin-bottom: 25px; font-size: 20px;">👤 Personal Information</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.first_name.id_for_label }}">First Name *</label>
+                    {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                        <div class="error-message">{{ form.first_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.last_name.id_for_label }}">Last Name *</label>
+                    {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                        <div class="error-message">{{ form.last_name.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">Email *</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <div class="error-message">{{ form.email.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.phone.id_for_label }}">Phone *</label>
+                    {{ form.phone }}
+                    {% if form.phone.errors %}
+                        <div class="error-message">{{ form.phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.date_of_birth.id_for_label }}">Date of Birth *</label>
+                    {{ form.date_of_birth }}
+                    {% if form.date_of_birth.errors %}
+                        <div class="error-message">{{ form.date_of_birth.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.gender.id_for_label }}">Gender *</label>
+                    {{ form.gender }}
+                    {% if form.gender.errors %}
+                        <div class="error-message">{{ form.gender.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.blood_group.id_for_label }}">Blood Group</label>
+                    {{ form.blood_group }}
+                    {% if form.blood_group.errors %}
+                        <div class="error-message">{{ form.blood_group.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.profile_image.id_for_label }}">Profile Image</label>
+                    {{ form.profile_image }}
+                    {% if form.profile_image.errors %}
+                        <div class="error-message">{{ form.profile_image.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Address Information -->
+        <div class="form-section">
+            <h2 style="color: #7877c6; margin-bottom: 25px; font-size: 20px;">📍 Address Information</h2>
+            <div class="form-group">
+                <label for="{{ form.address.id_for_label }}">Street Address *</label>
+                {{ form.address }}
+                {% if form.address.errors %}
+                    <div class="error-message">{{ form.address.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.city.id_for_label }}">City *</label>
+                    {{ form.city }}
+                    {% if form.city.errors %}
+                        <div class="error-message">{{ form.city.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.state.id_for_label }}">State *</label>
+                    {{ form.state }}
+                    {% if form.state.errors %}
+                        <div class="error-message">{{ form.state.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.postal_code.id_for_label }}">Postal Code *</label>
+                    {{ form.postal_code }}
+                    {% if form.postal_code.errors %}
+                        <div class="error-message">{{ form.postal_code.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.country.id_for_label }}">Country *</label>
+                    {{ form.country }}
+                    {% if form.country.errors %}
+                        <div class="error-message">{{ form.country.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Academic Information -->
+        <div class="form-section">
+            <h2 style="color: #7877c6; margin-bottom: 25px; font-size: 20px;">🎓 Academic Information</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.student_id.id_for_label }}">Student ID *</label>
+                    {{ form.student_id }}
+                    {% if form.student_id.errors %}
+                        <div class="error-message">{{ form.student_id.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.status.id_for_label }}">Status *</label>
+                    {{ form.status }}
+                    {% if form.status.errors %}
+                        <div class="error-message">{{ form.status.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Emergency Contact -->
+        <div class="form-section">
+            <h2 style="color: #7877c6; margin-bottom: 25px; font-size: 20px;">🚨 Emergency Contact</h2>
+            <div class="form-group">
+                <label for="{{ form.parent_name.id_for_label }}">Parent/Guardian Name</label>
+                {{ form.parent_name }}
+                {% if form.parent_name.errors %}
+                    <div class="error-message">{{ form.parent_name.errors.0 }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="{{ form.parent_phone.id_for_label }}">Parent Phone</label>
+                    {{ form.parent_phone }}
+                    {% if form.parent_phone.errors %}
+                        <div class="error-message">{{ form.parent_phone.errors.0 }}</div>
+                    {% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.emergency_contact.id_for_label }}">Emergency Contact</label>
+                    {{ form.emergency_contact }}
+                    {% if form.emergency_contact.errors %}
+                        <div class="error-message">{{ form.emergency_contact.errors.0 }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; display: flex; gap: 15px;">
+        <button type="submit" class="btn btn-success">💾 Save Student</button>
+        <a href="{% url 'student_list' %}" class="btn">❌ Cancel</a>
+    </div>
+</form>
+
+<style>
+.form-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+
+.form-section {
+    background: rgba(44, 62, 80, 0.3);
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid rgba(120, 119, 198, 0.2);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-top: 5px;
+}
+</style>
+{% endblock %}
